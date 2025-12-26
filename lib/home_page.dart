@@ -208,9 +208,9 @@ class _HomePageState extends State<HomePage> {
 
               // -------------------- OFFICE INFO CARD --------------------
               _glassCard(
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       "GK Indane Service",
                       style:
@@ -380,19 +380,19 @@ class _HomePageState extends State<HomePage> {
     return Drawer(
       child: Column(
         children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(color: Color(0xFFFD5000)),
+          const DrawerHeader(
+            decoration: BoxDecoration(color: Color(0xFFFD5000)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 35,
                   backgroundColor: Colors.white,
                   child: Icon(Icons.local_gas_station,
                       size: 40, color: Color(0xFFFD5000)),
                 ),
-                const SizedBox(height: 10),
-                const Text(
+                SizedBox(height: 10),
+                Text(
                   "GK Indane",
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),

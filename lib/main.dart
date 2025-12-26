@@ -1,7 +1,8 @@
-import 'package:app/spalsh_screen.dart';
 import 'package:flutter/material.dart';
+import 'splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -10,9 +11,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      title: 'My GK Indane',
+      theme: ThemeData(
+        useMaterial3: true,
+        fontFamily: 'Poppins',
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFFFD5000),
+        ),
+      ),
+      home: const SplashScreen(),
     );
   }
 }
+
+
+
