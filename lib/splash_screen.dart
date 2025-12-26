@@ -80,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
             const SizedBox(height: 20),
             const Text(
-              "My GK Indane",
+              "MY GK INDANE",
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 32,
