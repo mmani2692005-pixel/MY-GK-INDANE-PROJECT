@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -9,24 +10,22 @@ class UpdateSaleAreaPage extends StatefulWidget {
 }
 
 class _UpdateSaleAreaPageState extends State<UpdateSaleAreaPage> {
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController stockController = TextEditingController();
-  final TextEditingController areaController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  final dateController = TextEditingController();
+  final stockController = TextEditingController();
+  final areaController = TextEditingController();
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
 
   Future<void> _selectDate() async {
-    DateTime? pickedDate = await showDatePicker(
+    final picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2024),
       lastDate: DateTime(2030),
     );
 
-    if (pickedDate != null) {
-      setState(() {
-        dateController.text = DateFormat("dd MMM yyyy").format(pickedDate);
-      });
+    if (picked != null) {
+      dateController.text = DateFormat("dd MMM yyyy").format(picked);
     }
   }
 
@@ -54,79 +53,131 @@ class _UpdateSaleAreaPageState extends State<UpdateSaleAreaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFD5000),
-        title: const Text("Update Sale Area",
-            style: TextStyle(color: Colors.white)),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const Text(
+          "Update Sale Area",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFFD5000), Color(0xFFFFE0CC)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // 📅 DATE PICKER FIELD
-              GestureDetector(
-                onTap: _selectDate,
-                child: AbsorbPointer(
-                  child: _inputField(
-                    "Date",
-                    dateController,
-                    suffixIcon: Icons.calendar_today,
-                  ),
+          padding: const EdgeInsets.fromLTRB(16, 110, 16, 30),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Column(
+                  children: [
+                    _dateField(),
+                    _input(
+                      "Available Stock",
+                      stockController,
+                      icon: Icons.inventory,
+                      keyboard: TextInputType.number,
+                    ),
+                    _input(
+                      "Sale Area",
+                      areaController,
+                      icon: Icons.location_on,
+                    ),
+                    _input(
+                      "In-charge Name",
+                      nameController,
+                      icon: Icons.person,
+                    ),
+                    _input(
+                      "In-charge Phone",
+                      phoneController,
+                      icon: Icons.phone,
+                      keyboard: TextInputType.phone,
+                    ),
+                    const SizedBox(height: 30),
+
+                    // ---------------- BUTTON ----------------
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: ElevatedButton(
+                        onPressed: _submitData,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFD5000),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 8,
+                        ),
+                        child: const Text(
+                          "UPDATE",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-
-              _inputField(
-                "Available Stock",
-                stockController,
-                keyboardType: TextInputType.number,
-              ),
-              _inputField("Sale Area", areaController),
-              _inputField("In-charge Name", nameController),
-              _inputField(
-                "In-charge Phone",
-                phoneController,
-                keyboardType: TextInputType.phone,
-              ),
-
-              const SizedBox(height: 25),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFD5000),
-                    padding: const EdgeInsets.all(14),
-                  ),
-                  onPressed: _submitData,
-                  child: const Text(
-                    "Update",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
-              )
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _inputField(
+  // ---------------- DATE FIELD ----------------
+  Widget _dateField() {
+    return GestureDetector(
+      onTap: _selectDate,
+      child: AbsorbPointer(
+        child: _input(
+          "Date",
+          dateController,
+          icon: Icons.calendar_today,
+        ),
+      ),
+    );
+  }
+
+  // ---------------- INPUT FIELD ----------------
+  Widget _input(
     String label,
     TextEditingController controller, {
-    TextInputType keyboardType = TextInputType.text,
-    IconData? suffixIcon,
+    IconData? icon,
+    TextInputType keyboard = TextInputType.text,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.only(bottom: 18),
       child: TextField(
         controller: controller,
-        keyboardType: keyboardType,
+        keyboardType: keyboard,
         decoration: InputDecoration(
           labelText: label,
-          suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
+          prefixIcon: icon != null ? Icon(icon) : null,
+          filled: true,
+          fillColor: Colors.grey.shade100,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
           ),
         ),
       ),

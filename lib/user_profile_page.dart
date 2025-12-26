@@ -200,11 +200,6 @@ class UserProfilePage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
                   child: Column(
                     children: [
-                      ProfileTile(
-                        icon: Icons.elderly,
-                        title: "Age",
-                        value: "25 Years",
-                      ),
                       Divider(height: 28),
                       ProfileTile(
                         icon: Icons.phone,
@@ -218,11 +213,7 @@ class UserProfilePage extends StatelessWidget {
                         value: "Port Blair, Andaman & Nicobar",
                       ),
                       Divider(height: 28),
-                      ProfileTile(
-                        icon: Icons.badge,
-                        title: "Aadhaar",
-                        value: "XXXX • XXXX • 9012",
-                      ),
+                      
                     ],
                   ),
                 ),

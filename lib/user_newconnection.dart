@@ -1,9 +1,10 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:app/adminhome_page.dart';
-import 'package:app/user_profile_page.dart';
-// ignore: depend_on_referenced_packages
 import 'package:image_picker/image_picker.dart';
+
+import 'adminhome_page.dart';
+import 'user_profile_page.dart';
 
 class NewConnectionPage extends StatefulWidget {
   const NewConnectionPage({super.key});
@@ -15,109 +16,85 @@ class NewConnectionPage extends StatefulWidget {
 class _NewConnectionPageState extends State<NewConnectionPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController ageController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController aadharController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  final nameController = TextEditingController();
+  final ageController = TextEditingController();
+  final addressController = TextEditingController();
+  final aadharController = TextEditingController();
+  final phoneController = TextEditingController();
 
   File? aadharFile;
   final ImagePicker _picker = ImagePicker();
 
+  int _selectedIndex = 0;
+
   // ─────────────────────────────────────────────
-  // ADMIN LOGIN POPUP (UNCHANGED)
+  // ADMIN LOGIN (MODERN)
   // ─────────────────────────────────────────────
   void showAdminLoginDialog() {
-    TextEditingController passController = TextEditingController();
+    final passController = TextEditingController();
     bool showPassword = false;
 
     showDialog(
       context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      "Admin Login",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFFD5000),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: passController,
-                      obscureText: !showPassword,
-                      decoration: InputDecoration(
-                        labelText: "Enter Password",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            showPassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() => showPassword = !showPassword);
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("Back"),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFFD5000),
-                          ),
-                          onPressed: () {
-                            if (passController.text == "1234") {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const AdminHomePage(),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Invalid Password"),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          },
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+      builder: (_) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            title: const Text(
+              "Admin Login",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: TextField(
+              controller: passController,
+              obscureText: !showPassword,
+              decoration: InputDecoration(
+                hintText: "Enter admin password",
+                prefixIcon: const Icon(Icons.lock),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                      showPassword ? Icons.visibility : Icons.visibility_off),
+                  onPressed: () =>
+                      setState(() => showPassword = !showPassword),
                 ),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
               ),
-            );
-          },
-        );
-      },
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFD5000),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14)),
+                ),
+                onPressed: () {
+                  if (passController.text == "1234") {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const AdminHomePage()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Invalid Password"),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+                child: const Text("Login"),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -125,21 +102,21 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
   // PICK AADHAR
   // ─────────────────────────────────────────────
   Future<void> pickAadhar() async {
-    final XFile? pickedFile =
+    final XFile? picked =
         await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() => aadharFile = File(pickedFile.path));
+    if (picked != null) {
+      setState(() => aadharFile = File(picked.path));
     }
   }
 
   // ─────────────────────────────────────────────
-  // SUBMIT FORM
+  // SUBMIT
   // ─────────────────────────────────────────────
   void submitForm() {
     if (_formKey.currentState!.validate()) {
       if (aadharFile == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please upload Aadhaar")),
+          const SnackBar(content: Text("Please upload Aadhaar card")),
         );
         return;
       }
@@ -166,148 +143,173 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
   }
 
   // ─────────────────────────────────────────────
-  // BUILD UI
+  // UI
   // ─────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFD5000),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
         title: const Text(
           "New Connection Apply",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-
-      // FORM CONTENT
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              _buildField(
-                controller: nameController,
-                label: "Full Name",
-                icon: Icons.person,
-              ),
-              const SizedBox(height: 15),
-              _buildField(
-                controller: ageController,
-                label: "Age",
-                icon: Icons.elderly,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) return "Enter age";
-                  final age = int.tryParse(value);
-                  if (age == null || age < 18) {
-                    return "Age must be 18 or above";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
-              _buildField(
-                controller: phoneController,
-                label: "Phone Number",
-                icon: Icons.phone,
-                keyboardType: TextInputType.phone,
-                maxLength: 10,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter phone number";
-                  } else if (value.length != 10) {
-                    return "Enter valid 10 digit number";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
-              _buildField(
-                controller: addressController,
-                label: "Address",
-                icon: Icons.location_on,
-                maxLines: 3,
-              ),
-              const SizedBox(height: 15),
-              _buildField(
-                controller: aadharController,
-                label: "Aadhar Number",
-                icon: Icons.badge,
-                maxLength: 10,
-              ),
-              const SizedBox(height: 20),
-
-              // AADHAR UPLOAD
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFFD5000), Color(0xFFFFE0CC)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 110, 16, 30),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(24),
                 ),
-                child: Column(
-                  children: [
-                    const Text(
-                      "Upload Aadhaar Card",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    aadharFile != null
-                        ? Image.file(aadharFile!, height: 150)
-                        : const Text("No file selected"),
-                    const SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      onPressed: pickAadhar,
-                      icon: const Icon(Icons.upload),
-                      label: const Text("Choose File"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFD5000),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      _field(
+                        controller: nameController,
+                        label: "Full Name",
+                        icon: Icons.person,
                       ),
-                    ),
-                  ],
+                      _field(
+                        controller: ageController,
+                        label: "Age",
+                        icon: Icons.elderly,
+                        keyboard: TextInputType.number,
+                        validator: (v) {
+                          final age = int.tryParse(v ?? "");
+                          if (age == null || age < 18) {
+                            return "Age must be 18 or above";
+                          }
+                          return null;
+                        },
+                      ),
+                      _field(
+                        controller: phoneController,
+                        label: "Phone Number",
+                        icon: Icons.phone,
+                        keyboard: TextInputType.phone,
+                        maxLength: 10,
+                        validator: (v) =>
+                            v != null && v.length == 10 ? null : "Invalid phone",
+                      ),
+                      _field(
+                        controller: addressController,
+                        label: "Address",
+                        icon: Icons.location_on,
+                        maxLines: 3,
+                      ),
+                      _field(
+                        controller: aadharController,
+                        label: "Aadhaar Number",
+                        icon: Icons.badge,
+                        maxLength: 12,
+                      ),
+                      const SizedBox(height: 20),
+
+                      // ---------------- AADHAR UPLOAD ----------------
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          children: [
+                            const Text(
+                              "Upload Aadhaar Card",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 16),
+                            ),
+                            const SizedBox(height: 10),
+                            aadharFile != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.file(
+                                      aadharFile!,
+                                      height: 160,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : const Text("No file selected"),
+                            const SizedBox(height: 10),
+                            ElevatedButton.icon(
+                              onPressed: pickAadhar,
+                              icon: const Icon(Icons.upload),
+                              label: const Text("Choose File"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFFD5000),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      // ---------------- SUBMIT ----------------
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: submitForm,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFD5000),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            elevation: 8,
+                          ),
+                          child: const Text(
+                            "SUBMIT APPLICATION",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-
-              const SizedBox(height: 25),
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFD5000),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                  ),
-                  child: const Text(
-                    "SUBMIT APPLICATION",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
 
-      // ─────────────────────────────────────────────
-      // ⭐ BOTTOM NAVIGATION BAR (UPDATED PROFILE)
-      // ─────────────────────────────────────────────
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: const Color(0xFFFD5000),
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pop(context); // Home
-          } else if (index == 1) {
-            showAdminLoginDialog(); // Admin
-          } else if (index == 2) {
+      // ---------------- BOTTOM NAV ----------------
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          if (index == 1) {
+            showAdminLoginDialog();
+            return;
+          }
+          setState(() => _selectedIndex = index);
+
+          if (index == 2) {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -316,40 +318,46 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
             );
           }
         },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+          NavigationDestination(
               icon: Icon(Icons.admin_panel_settings), label: "Admin"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
   }
 
-  // ─────────────────────────────────────────────
-  // REUSABLE FIELD
-  // ─────────────────────────────────────────────
-  Widget _buildField({
+  // ---------------- FIELD ----------------
+  Widget _field({
     required TextEditingController controller,
     required String label,
     required IconData icon,
     int maxLines = 1,
     int? maxLength,
-    TextInputType keyboardType = TextInputType.text,
+    TextInputType keyboard = TextInputType.text,
     String? Function(String?)? validator,
   }) {
-    return TextFormField(
-      controller: controller,
-      maxLines: maxLines,
-      maxLength: maxLength,
-      keyboardType: keyboardType,
-      validator: validator ??
-          (value) => value == null || value.isEmpty ? "Enter $label" : null,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: const OutlineInputBorder(),
-        counterText: "",
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 18),
+      child: TextFormField(
+        controller: controller,
+        maxLines: maxLines,
+        maxLength: maxLength,
+        keyboardType: keyboard,
+        validator:
+            validator ?? (v) => v == null || v.isEmpty ? "Enter $label" : null,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon),
+          filled: true,
+          fillColor: Colors.grey.shade100,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          counterText: "",
+        ),
       ),
     );
   }
