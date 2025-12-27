@@ -340,6 +340,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
+              // ignore: deprecated_member_use
               color: Colors.white.withOpacity(0.85),
               borderRadius: BorderRadius.circular(20),
             ),
@@ -363,6 +364,7 @@ class _HomePageState extends State<HomePage> {
       onTap: () async {
         final uri = Uri.parse(url);
         if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Could not open maps")),
           );

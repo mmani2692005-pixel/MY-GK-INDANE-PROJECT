@@ -48,6 +48,7 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
+              // ignore: deprecated_member_use
               color: Colors.white.withOpacity(0.9),
               borderRadius: BorderRadius.circular(22),
             ),
@@ -80,15 +81,13 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton.icon(
-                      icon:
-                          const Icon(Icons.close, color: Colors.redAccent),
+                      icon: const Icon(Icons.close, color: Colors.redAccent),
                       label: const Text("Reject"),
                       onPressed: () {},
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton.icon(
-                      icon:
-                          const Icon(Icons.check, color: Colors.white),
+                      icon: const Icon(Icons.check, color: Colors.white),
                       label: const Text("Resolve"),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -113,8 +112,7 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
   // STATUS CHIP
   // ---------------------------------------------------------------------------
   Widget _statusChip(String status) {
-    Color color =
-        status == "Resolved" ? Colors.green : Colors.orange;
+    Color color = status == "Resolved" ? Colors.green : Colors.orange;
 
     return Chip(
       label: Text(
@@ -147,8 +145,7 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: "$label: ",
-                    style:
-                        const TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   TextSpan(text: value),
                 ],

@@ -45,8 +45,7 @@ class AdminDeliveryComplaintViewPage extends StatelessWidget {
         ],
       ),
       child: ExpansionTile(
-        tilePadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         leading: const CircleAvatar(
           backgroundColor: Color(0xFFFFE0CC),
           child: Icon(Icons.local_shipping, color: Color(0xFFFD5000)),
@@ -55,8 +54,8 @@ class AdminDeliveryComplaintViewPage extends StatelessWidget {
           "Consumer No: 2000$index",
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Row(
-          children: const [
+        subtitle: const Row(
+          children: [
             _StatusChip(text: "Pending"),
           ],
         ),
@@ -65,8 +64,8 @@ class AdminDeliveryComplaintViewPage extends StatelessWidget {
         children: [
           _infoRow(Icons.person, "Name", "User Name $index"),
           _infoRow(Icons.phone, "Phone", "98765432$index"),
-          _infoRow(Icons.location_on, "Address",
-              "Port Blair, Andaman & Nicobar"),
+          _infoRow(
+              Icons.location_on, "Address", "Port Blair, Andaman & Nicobar"),
           _infoRow(Icons.timer, "Delivery Issue",
               "Cylinder not delivered on scheduled date"),
           _infoRow(Icons.date_range, "Booking Date", "12-Jan-2025"),
@@ -135,13 +134,11 @@ class AdminDeliveryComplaintViewPage extends StatelessWidget {
           Expanded(
             child: RichText(
               text: TextSpan(
-                style:
-                    const TextStyle(color: Colors.black87, fontSize: 14),
+                style: const TextStyle(color: Colors.black87, fontSize: 14),
                 children: [
                   TextSpan(
                     text: "$label: ",
-                    style:
-                        const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   TextSpan(text: value),
                 ],

@@ -48,8 +48,7 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
                 suffixIcon: IconButton(
                   icon: Icon(
                       showPassword ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () =>
-                      setState(() => showPassword = !showPassword),
+                  onPressed: () => setState(() => showPassword = !showPassword),
                 ),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -71,8 +70,7 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => const AdminHomePage()),
+                      MaterialPageRoute(builder: (_) => const AdminHomePage()),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -125,6 +123,7 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
+                  // ignore: deprecated_member_use
                   color: Colors.white.withOpacity(0.9),
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -249,8 +248,7 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
         controller: controller,
         maxLines: maxLines,
         keyboardType: keyboard,
-        validator: (v) =>
-            v == null || v.trim().isEmpty ? "Enter $label" : null,
+        validator: (v) => v == null || v.trim().isEmpty ? "Enter $label" : null,
         decoration: InputDecoration(
           labelText: label,
           prefixIcon: Icon(icon),

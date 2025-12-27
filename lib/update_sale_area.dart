@@ -80,6 +80,7 @@ class _UpdateSaleAreaPageState extends State<UpdateSaleAreaPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
+                  // ignore: deprecated_member_use
                   color: Colors.white.withOpacity(0.9),
                   borderRadius: BorderRadius.circular(24),
                 ),

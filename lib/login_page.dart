@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                   constraints: const BoxConstraints(maxWidth: 420),
                   padding: const EdgeInsets.all(28),
                   decoration: BoxDecoration(
+                    // ignore: deprecated_member_use
                     color: Colors.white.withOpacity(0.85),
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -154,6 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                                       setState(() => isLoading = false);
 
                                       Navigator.pushReplacement(
+                                        // ignore: use_build_context_synchronously
                                         context,
                                         MaterialPageRoute(
                                           builder: (_) => const HomePage(),
@@ -241,4 +243,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

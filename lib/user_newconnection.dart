@@ -54,8 +54,7 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
                 suffixIcon: IconButton(
                   icon: Icon(
                       showPassword ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () =>
-                      setState(() => showPassword = !showPassword),
+                  onPressed: () => setState(() => showPassword = !showPassword),
                 ),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -77,8 +76,7 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => const AdminHomePage()),
+                      MaterialPageRoute(builder: (_) => const AdminHomePage()),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -102,8 +100,7 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
   // PICK AADHAR
   // ─────────────────────────────────────────────
   Future<void> pickAadhar() async {
-    final XFile? picked =
-        await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? picked = await _picker.pickImage(source: ImageSource.gallery);
     if (picked != null) {
       setState(() => aadharFile = File(picked.path));
     }
@@ -175,6 +172,7 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
+                  // ignore: deprecated_member_use
                   color: Colors.white.withOpacity(0.9),
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -206,8 +204,9 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
                         icon: Icons.phone,
                         keyboard: TextInputType.phone,
                         maxLength: 10,
-                        validator: (v) =>
-                            v != null && v.length == 10 ? null : "Invalid phone",
+                        validator: (v) => v != null && v.length == 10
+                            ? null
+                            : "Invalid phone",
                       ),
                       _field(
                         controller: addressController,
