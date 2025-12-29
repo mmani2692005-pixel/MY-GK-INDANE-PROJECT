@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          "GK Indane Service",
+          "GK INDANE SERVICE",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,

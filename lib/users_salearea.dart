@@ -14,11 +14,11 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
   int _selectedIndex = 0;
 
   // DEMO DATA
-  final String date = "16 Dec 2025";
-  final int stockCount = 128;
-  final String saleArea = "Junglighat, Aberdeen, Dollygunj";
-  final String inchargeName = "Mr. Ramesh Kumar";
-  final String inchargePhone = "+91 9876543210";
+  final String date = "06 Jan 2026";
+  final int stockCount = 150;
+  final String saleArea = "Pema,calicut,kamraj nagar";
+  final String inchargeName = "Mr.Mohammed Shafique ";
+  final String inchargePhone = "+91 7846018731";
 
   // ─────────────────────────────────────────────
   // ADMIN LOGIN POPUP
