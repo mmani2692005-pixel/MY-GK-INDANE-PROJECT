@@ -52,13 +52,12 @@ class _HomePageState extends State<HomePage> {
                 hintText: "Enter admin password",
                 prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
-                  icon: Icon(
-                      showPass ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () =>
-                      setState(() => showPass = !showPass),
+                  icon:
+                      Icon(showPass ? Icons.visibility : Icons.visibility_off),
+                  onPressed: () => setState(() => showPass = !showPass),
                 ),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
               ),
             ),
             actions: [
@@ -77,8 +76,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => const AdminHomePage()),
+                      MaterialPageRoute(builder: (_) => const AdminHomePage()),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -118,7 +116,7 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFFD5000), Color(0xFFFFE0CC)],
+            colors: [Color(0xFFFD5000), Colors.orange],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -145,8 +143,7 @@ class _HomePageState extends State<HomePage> {
                   height: 190,
                   autoPlay: true,
                   enlargeCenterPage: true,
-                  onPageChanged: (i, _) =>
-                      setState(() => _currentCarousel = i),
+                  onPageChanged: (i, _) => setState(() => _currentCarousel = i),
                 ),
               ),
 
@@ -259,8 +256,7 @@ class _HomePageState extends State<HomePage> {
                     _directionTile(
                       title: "GK Indane Godown",
                       subtitle: "Sri Vijaya Puram",
-                      url:
-                          "https://maps.app.goo.gl/L5bfe6GZCVQdGajh9",
+                      url: "https://maps.app.goo.gl/L5bfe6GZCVQdGajh9",
                     ),
                   ],
                 ),
@@ -344,6 +340,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
+              // ignore: deprecated_member_use
               color: Colors.white.withOpacity(0.85),
               borderRadius: BorderRadius.circular(20),
             ),
@@ -366,8 +363,8 @@ class _HomePageState extends State<HomePage> {
       trailing: const Icon(Icons.open_in_new),
       onTap: () async {
         final uri = Uri.parse(url);
-        if (!await launchUrl(uri,
-            mode: LaunchMode.externalApplication)) {
+        if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Could not open maps")),
           );
