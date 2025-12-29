@@ -7,7 +7,7 @@ import 'adminhome_page.dart';
 import 'userdefective.dart';
 import 'user_newconnection.dart';
 import 'user_profile_page.dart';
-import 'users_salearea.dart';
+import 'users_sale&stock.dart';
 import 'user_delivery_complaint.dart';
 
 class HomePage extends StatefulWidget {
