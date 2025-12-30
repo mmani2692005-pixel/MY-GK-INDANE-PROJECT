@@ -1,3 +1,4 @@
+import 'package:app/home_page.dart';
 import 'package:flutter/material.dart';
 import 'admin_delivery_complaint.dart';
 import 'update_sale_area.dart';
@@ -43,7 +44,7 @@ class AdminHomePage extends StatelessWidget {
                 ),
               ),
               accountName: Text("Admin"),
-              accountEmail: Text(""),
+              accountEmail: Text("g.k.indaneservice@gmail.com"),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Icon(Icons.admin_panel_settings,
@@ -94,6 +95,17 @@ class AdminHomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const UpdateSaleAreaPage()),
+                );
+              },
+            ),
+            _drawerItem(
+              context,
+              icon: Icons.logout,
+              text: "logout",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomePage()),
                 );
               },
             ),
