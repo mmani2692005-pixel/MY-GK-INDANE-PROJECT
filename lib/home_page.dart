@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:app/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -397,14 +398,39 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           ListTile(
+            leading: const Icon(Icons.admin_panel_settings),
+            title: const Text("Admin Login"),
+            onTap: showAdminLoginDialog,
+          ),
+          ListTile(
+            leading: const Icon(Icons.layers),
+            title: const Text("Sale & Stock"),
+            onTap: () => _go(const ViewSaleAreaPage()),
+          ),
+          ListTile(
+            leading: const Icon(Icons.add_box),
+            title: const Text("New Connection"),
+            onTap: () => _go(const NewConnectionPage()),
+          ),
+          ListTile(
+            leading: const Icon(Icons.report_problem),
+            title: const Text("Defective Cylinder"),
+            onTap: () => _go(const DefectiveCylinderPage()),
+          ),
+          ListTile(
+            leading: const Icon(Icons.delivery_dining),
+            title: const Text("Delivery Complaint"),
+            onTap: () => _go(const DeliveryComplaintPage()),
+          ),
+          ListTile(
             leading: const Icon(Icons.person),
             title: const Text("Profile"),
             onTap: () => _go(const UserProfilePage()),
           ),
           ListTile(
-            leading: const Icon(Icons.admin_panel_settings),
-            title: const Text("Admin Login"),
-            onTap: showAdminLoginDialog,
+            leading: const Icon(Icons.logout),
+            title: const Text("Logout"),
+            onTap: () => _go(const LoginPage()),
           ),
         ],
       ),
