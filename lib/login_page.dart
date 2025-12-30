@@ -89,20 +89,20 @@ class _LoginPageState extends State<LoginPage> {
                         TextFormField(
                           controller: phoneController,
                           keyboardType: TextInputType.phone,
-                          maxLength: 10,
+                          //maxLength: 10,
                           decoration: _inputDecoration(
                             label: "Phone Number",
                             icon: Icons.phone_rounded,
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Enter phone number";
-                            }
-                            if (value.length != 10) {
-                              return "Enter valid 10-digit number";
-                            }
-                            return null;
-                          },
+                          //validator: (value) {
+                           // if (value == null || value.isEmpty) {
+                             // return "Enter phone number";
+                           // }
+                          //  if (value.length != 10) {
+                             // return "Enter valid 10-digit number";
+                           // }
+                          //  return null;
+                          //},
                         ),
 
                         const SizedBox(height: 18),
@@ -127,15 +127,15 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Enter password";
-                            }
-                            if (value.length < 8) {
-                              return "Minimum 8 characters required";
-                            }
-                            return null;
-                          },
+                          //validator: (value) {
+                          //  if (value == null || value.isEmpty) {
+                           //   return "Enter password";
+                         //   }
+                          //  if (value.length < 8) {
+                         ///     return "Minimum 8 characters required";
+                           // }
+                           // return null;
+                         // },
                         ),
 
                         const SizedBox(height: 30),
