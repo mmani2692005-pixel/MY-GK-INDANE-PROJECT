@@ -271,18 +271,14 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: 0,
         onDestinationSelected: (index) {
-          if (index == 1) showAdminLoginDialog();
-          if (index == 2) _go(const UserProfilePage());
+          if (index == 1) _go(const UserProfilePage());
         },
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home),
             label: "Home",
           ),
-          NavigationDestination(
-            icon: Icon(Icons.admin_panel_settings),
-            label: "Admin",
-          ),
+          
           NavigationDestination(
             icon: Icon(Icons.person),
             label: "Profile",

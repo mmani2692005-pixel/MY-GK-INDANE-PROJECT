@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:app/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'adminhome_page.dart';
@@ -226,31 +227,37 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
       ),
 
       // ---------------- BOTTOM NAV ----------------
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
-          if (index == 1) {
-            showAdminLoginDialog();
-            return;
-          }
-          setState(() => _selectedIndex = index);
+      bottomNavigationBar: BottomNavigationBar(
+  currentIndex: 0, // Home selected
+  selectedItemColor: const Color(0xFFFD5000),
+  unselectedItemColor: Colors.grey,
+  onTap: (index) {
+    if (index == 0) {
+      // Home
+      Navigator.pop(context);
+    } else if (index == 1) {
+      // Profile
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const UserProfilePage(),
+        ),
+      );
+    }
+  },
+  items: const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: "Home",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: "Profile",
+    ),
+  ],
+),
 
-          if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const UserProfilePage(),
-              ),
-            );
-          }
-        },
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-          NavigationDestination(
-              icon: Icon(Icons.admin_panel_settings), label: "Admin"),
-          NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
+
     );
   }
 

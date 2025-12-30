@@ -142,6 +142,7 @@ class _UpdateSaleAreaPageState extends State<UpdateSaleAreaPage> {
           ),
         ),
       ),
+      
     );
   }
 
@@ -184,4 +185,5 @@ class _UpdateSaleAreaPageState extends State<UpdateSaleAreaPage> {
       ),
     );
   }
+  
 }
