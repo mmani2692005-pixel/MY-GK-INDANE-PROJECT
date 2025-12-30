@@ -19,7 +19,7 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
   final addressController = TextEditingController();
   final defectController = TextEditingController();
 
-  int _selectedIndex = 0;
+
 
   // ─────────────────────────────────────────────
   // ADMIN LOGIN (MODERN)

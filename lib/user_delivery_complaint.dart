@@ -19,7 +19,7 @@ class _DeliveryComplaintPageState extends State<DeliveryComplaintPage> {
   final addressController = TextEditingController();
   final complaintController = TextEditingController();
 
-  int _selectedIndex = 0;
+ 
 
   // ─────────────────────────────────────────────
   // ADMIN LOGIN DIALOG (MODERN)

@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:app/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'adminhome_page.dart';
@@ -13,7 +12,7 @@ class ViewSaleAreaPage extends StatefulWidget {
 }
 
 class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
-  int _selectedIndex = 0;
+  
 
   // DEMO DATA
   final String date = "06 Jan 2026";

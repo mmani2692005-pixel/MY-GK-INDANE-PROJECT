@@ -25,7 +25,7 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
   File? aadharFile;
   final ImagePicker _picker = ImagePicker();
 
-  int _selectedIndex = 0;
+  
 
   // ─────────────────────────────────────────────
   // ADMIN LOGIN (MODERN)
