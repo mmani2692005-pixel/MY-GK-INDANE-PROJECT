@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:app/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,7 +8,7 @@ import 'adminhome_page.dart';
 import 'userdefective.dart';
 import 'user_newconnection.dart';
 import 'user_profile_page.dart';
-import 'users_salearea.dart';
+import 'users_sale&stock.dart';
 import 'user_delivery_complaint.dart';
 
 class HomePage extends StatefulWidget {
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          "GK Indane Service",
+          "GK INDANE SERVICE",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -270,18 +271,14 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: 0,
         onDestinationSelected: (index) {
-          if (index == 1) showAdminLoginDialog();
-          if (index == 2) _go(const UserProfilePage());
+          if (index == 1) _go(const UserProfilePage());
         },
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home),
             label: "Home",
           ),
-          NavigationDestination(
-            icon: Icon(Icons.admin_panel_settings),
-            label: "Admin",
-          ),
+          
           NavigationDestination(
             icon: Icon(Icons.person),
             label: "Profile",
@@ -397,14 +394,39 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           ListTile(
+            leading: const Icon(Icons.admin_panel_settings),
+            title: const Text("Admin Login"),
+            onTap: showAdminLoginDialog,
+          ),
+          ListTile(
+            leading: const Icon(Icons.layers),
+            title: const Text("Sale & Stock"),
+            onTap: () => _go(const ViewSaleAreaPage()),
+          ),
+          ListTile(
+            leading: const Icon(Icons.add_box),
+            title: const Text("New Connection"),
+            onTap: () => _go(const NewConnectionPage()),
+          ),
+          ListTile(
+            leading: const Icon(Icons.report_problem),
+            title: const Text("Defective Cylinder"),
+            onTap: () => _go(const DefectiveCylinderPage()),
+          ),
+          ListTile(
+            leading: const Icon(Icons.delivery_dining),
+            title: const Text("Delivery Complaint"),
+            onTap: () => _go(const DeliveryComplaintPage()),
+          ),
+          ListTile(
             leading: const Icon(Icons.person),
             title: const Text("Profile"),
             onTap: () => _go(const UserProfilePage()),
           ),
           ListTile(
-            leading: const Icon(Icons.admin_panel_settings),
-            title: const Text("Admin Login"),
-            onTap: showAdminLoginDialog,
+            leading: const Icon(Icons.logout),
+            title: const Text("Logout"),
+            onTap: () => _go(const LoginPage()),
           ),
         ],
       ),

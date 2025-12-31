@@ -1,6 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+// 🔹 IMPORT DEFECTIVE CYLINDER REPORT PAGE
+import 'admin_defective_cylinder_report_page.dart';
+
 class AdminDefectiveCylinderViewPage extends StatelessWidget {
   const AdminDefectiveCylinderViewPage({super.key});
 
@@ -11,12 +14,30 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
+        centerTitle: true,
         title: const Text(
           "Defective Cylinder Complaints",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        centerTitle: true,
+
+        // 🔹 HISTORY / REPORT PAGE BUTTON
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history),
+            tooltip: "Defective Cylinder Report",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const AdminDefectiveCylinderReportPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -48,7 +69,6 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
-              // ignore: deprecated_member_use
               color: Colors.white.withOpacity(0.9),
               borderRadius: BorderRadius.circular(22),
             ),
@@ -81,9 +101,17 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton.icon(
-                      icon: const Icon(Icons.close, color: Colors.redAccent),
+                      icon: const Icon(Icons.close,
+                          color: Colors.redAccent),
                       label: const Text("Reject"),
-                      onPressed: () {},
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Complaint Rejected"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton.icon(
@@ -95,7 +123,14 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Complaint Resolved"),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

@@ -1,7 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'adminhome_page.dart';
 import 'user_profile_page.dart';
+import 'common_success_page.dart';
+import 'home_page.dart';
 
 class DefectiveCylinderPage extends StatefulWidget {
   const DefectiveCylinderPage({super.key});
@@ -19,80 +20,16 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
   final addressController = TextEditingController();
   final defectController = TextEditingController();
 
-  int _selectedIndex = 0;
-
-  // ─────────────────────────────────────────────
-  // ADMIN LOGIN (MODERN)
-  // ─────────────────────────────────────────────
-  void showAdminLoginDialog() {
-    final passController = TextEditingController();
-    bool showPassword = false;
-
-    showDialog(
-      context: context,
-      builder: (_) => StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Text(
-              "Admin Login",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            content: TextField(
-              controller: passController,
-              obscureText: !showPassword,
-              decoration: InputDecoration(
-                hintText: "Enter admin password",
-                prefixIcon: const Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                      showPassword ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () => setState(() => showPassword = !showPassword),
-                ),
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFD5000),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14)),
-                ),
-                onPressed: () {
-                  if (passController.text == "1234") {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const AdminHomePage()),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Invalid Password"),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                child: const Text("Login"),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+  @override
+  void dispose() {
+    nameController.dispose();
+    consumerController.dispose();
+    phoneController.dispose();
+    addressController.dispose();
+    defectController.dispose();
+    super.dispose();
   }
 
-  // ─────────────────────────────────────────────
-  // UI
-  // ─────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,7 +60,6 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  // ignore: deprecated_member_use
                   color: Colors.white.withOpacity(0.9),
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -161,18 +97,30 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
                       ),
                       const SizedBox(height: 30),
 
-                      // ---------------- SUBMIT ----------------
+                      // SUBMIT BUTTON
                       SizedBox(
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      "Defective Cylinder Complaint Submitted"),
-                                  backgroundColor: Color(0xFFFD5000),
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CommonSuccessPage(
+                                    title: "Complaint Submitted!",
+                                    message:
+                                        "Your defective cylinder complaint has been submitted successfully.\nOur team will contact you shortly.",
+                                    onDone: () {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const HomePage(),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    },
+                                  ),
                                 ),
                               );
                             }
@@ -204,18 +152,13 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
         ),
       ),
 
-      // ---------------- BOTTOM NAV ----------------
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
+      // BOTTOM NAV
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        selectedItemColor: const Color(0xFFFD5000),
+        unselectedItemColor: Colors.grey,
+        onTap: (index) {
           if (index == 1) {
-            showAdminLoginDialog();
-            return;
-          }
-
-          setState(() => _selectedIndex = index);
-
-          if (index == 2) {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -224,17 +167,21 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
             );
           }
         },
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-          NavigationDestination(
-              icon: Icon(Icons.admin_panel_settings), label: "Admin"),
-          NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: "Profile",
+          ),
         ],
       ),
     );
   }
 
-  // ---------------- FIELD ----------------
+  // FORM FIELD
   Widget _field({
     required TextEditingController controller,
     required String label,
@@ -248,7 +195,8 @@ class _DefectiveCylinderPageState extends State<DefectiveCylinderPage> {
         controller: controller,
         maxLines: maxLines,
         keyboardType: keyboard,
-        validator: (v) => v == null || v.trim().isEmpty ? "Enter $label" : null,
+        validator: (v) =>
+            v == null || v.trim().isEmpty ? "Enter $label" : null,
         decoration: InputDecoration(
           labelText: label,
           prefixIcon: Icon(icon),

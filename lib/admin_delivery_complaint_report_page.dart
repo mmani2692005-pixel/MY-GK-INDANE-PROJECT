@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-// 🔹 IMPORT REPORT PAGE
-import 'admin_delivery_complaint_report_page.dart';
-
-class AdminDeliveryComplaintViewPage extends StatelessWidget {
-  const AdminDeliveryComplaintViewPage({super.key});
+class AdminDeliveryComplaintReportPage extends StatelessWidget {
+  const AdminDeliveryComplaintReportPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,43 +10,29 @@ class AdminDeliveryComplaintViewPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          "Delivery Complaints",
+          "Complaint Report History",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xFFFF6E40),
-
-        // 🔹 HISTORY / REPORT PAGE NAVIGATION
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history),
-            tooltip: "Complaint Report",
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const AdminDeliveryComplaintReportPage(),
-                ),
-              );
-            },
-          ),
-        ],
+        backgroundColor: const Color(0xFF4CAF50),
       ),
 
-      // LIST OF DELIVERY COMPLAINTS
+      // HISTORY LIST
       body: ListView.builder(
         padding: const EdgeInsets.all(14),
-        itemCount: 8, // demo data
+        itemCount: 6, // demo history data
         itemBuilder: (context, index) {
-          return _deliveryComplaintTile(context, index);
+          return _reportTile(context, index);
         },
       ),
     );
   }
 
   // ─────────────────────────────────────────────
-  // DELIVERY COMPLAINT TILE (MODERN)
+  // REPORT TILE
   // ─────────────────────────────────────────────
-  Widget _deliveryComplaintTile(BuildContext context, int index) {
+  Widget _reportTile(BuildContext context, int index) {
+    final bool isDelivered = index % 2 == 0;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -65,17 +48,24 @@ class AdminDeliveryComplaintViewPage extends StatelessWidget {
       ),
       child: ExpansionTile(
         tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        leading: const CircleAvatar(
-          backgroundColor: Color(0xFFFFE0CC),
-          child: Icon(Icons.local_shipping, color: Color(0xFFFD5000)),
+        leading: CircleAvatar(
+          backgroundColor:
+              isDelivered ? Colors.green.shade100 : Colors.red.shade100,
+          child: Icon(
+            isDelivered ? Icons.check_circle : Icons.cancel,
+            color: isDelivered ? Colors.green : Colors.red,
+          ),
         ),
         title: Text(
           "Consumer No: 2000$index",
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: const Row(
+        subtitle: Row(
           children: [
-            _StatusChip(text: "Pending"),
+            _StatusChip(
+              text: isDelivered ? "Delivered" : "Rejected",
+              isDelivered: isDelivered,
+            ),
           ],
         ),
         childrenPadding:
@@ -83,59 +73,12 @@ class AdminDeliveryComplaintViewPage extends StatelessWidget {
         children: [
           _infoRow(Icons.person, "Name", "User Name $index"),
           _infoRow(Icons.phone, "Phone", "98765432$index"),
-          _infoRow(
-              Icons.location_on, "Address", "Port Blair, Andaman & Nicobar"),
-          _infoRow(
-            Icons.timer,
-            "Delivery Issue",
-            "Cylinder not delivered on scheduled date",
-          ),
+          _infoRow(Icons.location_on, "Address",
+              "Port Blair, Andaman & Nicobar"),
+          _infoRow(Icons.timer, "Issue",
+              "Cylinder not delivered on scheduled date"),
           _infoRow(Icons.date_range, "Booking Date", "12-Jan-2025"),
-          const SizedBox(height: 14),
-
-          // ADMIN ACTION BUTTONS
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton.icon(
-                icon: const Icon(Icons.check_circle),
-                label: const Text("Delivered"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Marked as Delivered"),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(width: 10),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.close),
-                label: const Text("Reject"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Complaint Rejected"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+          _infoRow(Icons.event_available, "Closed Date", "15-Jan-2025"),
           const SizedBox(height: 10),
         ],
       ),
@@ -151,7 +94,7 @@ class AdminDeliveryComplaintViewPage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: const Color(0xFFFD5000)),
+          Icon(icon, size: 20, color: const Color(0xFF4CAF50)),
           const SizedBox(width: 10),
           Expanded(
             child: RichText(
@@ -178,7 +121,12 @@ class AdminDeliveryComplaintViewPage extends StatelessWidget {
 // ─────────────────────────────────────────────
 class _StatusChip extends StatelessWidget {
   final String text;
-  const _StatusChip({required this.text});
+  final bool isDelivered;
+
+  const _StatusChip({
+    required this.text,
+    required this.isDelivered,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -186,13 +134,15 @@ class _StatusChip extends StatelessWidget {
       margin: const EdgeInsets.only(top: 4),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.orange.shade100,
+        color: isDelivered
+            ? Colors.green.shade100
+            : Colors.red.shade100,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: Colors.orange.shade800,
+          color: isDelivered ? Colors.green : Colors.red,
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),

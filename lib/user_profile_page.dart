@@ -227,23 +227,35 @@ class UserProfilePage extends StatelessWidget {
 
       // 🔶 BOTTOM NAVIGATION BAR
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2,
-        selectedItemColor: const Color(0xFFFD5000),
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pop(context);
-          } else if (index == 1) {
-            showAdminLoginDialog(context);
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.admin_panel_settings), label: "Admin"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
+  currentIndex: 0, // Home selected
+  selectedItemColor: const Color(0xFFFD5000),
+  unselectedItemColor: Colors.grey,
+  onTap: (index) {
+    if (index == 0) {
+      // Home
+      Navigator.pop(context);
+    } else if (index == 1) {
+      // Profile
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const UserProfilePage(),
+        ),
+      );
+    }
+  },
+  items: const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: "Home",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: "Profile",
+    ),
+  ],
+),
+
     );
   }
 }

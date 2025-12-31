@@ -1,11 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-// 🔹 IMPORT REPORT PAGE
-import 'admin_new_connection_report_page.dart';
-
-class NewConnectionDetailsAdminPage extends StatelessWidget {
-  const NewConnectionDetailsAdminPage({super.key});
+class AdminNewConnectionReportPage extends StatelessWidget {
+  const AdminNewConnectionReportPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,40 +13,23 @@ class NewConnectionDetailsAdminPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: const Text(
-          "New Connection Requests",
+          "New Connection Report",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-
-        // 🔹 REPORT / HISTORY BUTTON
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history),
-            tooltip: "New Connection Report",
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const AdminNewConnectionReportPage(),
-                ),
-              );
-            },
-          ),
-        ],
       ),
-
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFFD5000), Color(0xFFFFE0CC)],
+            colors: [Color(0xFF4CAF50), Color(0xFFDFF5E1)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: ListView.builder(
           padding: const EdgeInsets.fromLTRB(16, 100, 16, 20),
-          itemCount: 5, // demo
+          itemCount: 6, // demo history
           itemBuilder: (context, index) {
-            return _requestCard(context, index);
+            return _reportCard(index);
           },
         ),
       ),
@@ -57,9 +37,11 @@ class NewConnectionDetailsAdminPage extends StatelessWidget {
   }
 
   // ---------------------------------------------------------------------------
-  // REQUEST CARD
+  // REPORT CARD
   // ---------------------------------------------------------------------------
-  Widget _requestCard(BuildContext context, int index) {
+  Widget _reportCard(int index) {
+    final bool isApproved = index % 2 == 0;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: ClipRRect(
@@ -68,72 +50,40 @@ class NewConnectionDetailsAdminPage extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withOpacity(0.92),
               borderRadius: BorderRadius.circular(22),
             ),
             child: ExpansionTile(
               tilePadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              leading: const CircleAvatar(
-                backgroundColor: Color(0xFFFFE0CC),
-                child: Icon(Icons.person, color: Color(0xFFFD5000)),
+              leading: CircleAvatar(
+                backgroundColor: isApproved
+                    ? Colors.green.shade100
+                    : Colors.red.shade100,
+                child: Icon(
+                  isApproved ? Icons.check_circle : Icons.cancel,
+                  color: isApproved ? Colors.green : Colors.red,
+                ),
               ),
-              title: const Text(
-                "Ramesh Kumar",
-                style: TextStyle(fontWeight: FontWeight.w600),
+              title: Text(
+                "Ramesh Kumar $index",
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               subtitle: const Text("Domestic Connection"),
-              trailing: _statusChip("Pending"),
+              trailing: _statusChip(
+                isApproved ? "Approved" : "Rejected",
+              ),
               childrenPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               children: [
-                _infoRow(Icons.phone, "Mobile", "9876543210"),
-                _infoRow(
-                    Icons.location_on, "Address", "Port Blair, Andaman"),
+                _infoRow(Icons.phone, "Mobile", "98765432$index"),
+                _infoRow(Icons.location_on, "Address",
+                    "Port Blair, Andaman"),
                 _infoRow(Icons.badge, "KYC ID", "AADHAR-XXXX"),
                 _infoRow(
                     Icons.business, "Connection Type", "Domestic"),
-                const SizedBox(height: 16),
-
-                // ---------------- ADMIN ACTIONS ----------------
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton.icon(
-                      icon: const Icon(Icons.close,
-                          color: Colors.redAccent),
-                      label: const Text("Reject"),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Request Rejected"),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.check,
-                          color: Colors.white),
-                      label: const Text("Approve"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Request Approved"),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                _infoRow(Icons.event_available, "Processed Date",
+                    "18-Jan-2025"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -162,7 +112,10 @@ class NewConnectionDetailsAdminPage extends StatelessWidget {
     return Chip(
       label: Text(
         status,
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       backgroundColor: color,
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -178,7 +131,7 @@ class NewConnectionDetailsAdminPage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: const Color(0xFFFD5000)),
+          Icon(icon, size: 20, color: Colors.green),
           const SizedBox(width: 12),
           Expanded(
             child: RichText(

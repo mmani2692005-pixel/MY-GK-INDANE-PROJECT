@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'adminhome_page.dart';
 import 'user_profile_page.dart';
+import 'common_success_page.dart';
+import 'home_page.dart';
 
 class NewConnectionPage extends StatefulWidget {
   const NewConnectionPage({super.key});
@@ -25,76 +25,9 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
   File? aadharFile;
   final ImagePicker _picker = ImagePicker();
 
-  int _selectedIndex = 0;
+  
 
-  // ─────────────────────────────────────────────
-  // ADMIN LOGIN (MODERN)
-  // ─────────────────────────────────────────────
-  void showAdminLoginDialog() {
-    final passController = TextEditingController();
-    bool showPassword = false;
-
-    showDialog(
-      context: context,
-      builder: (_) => StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Text(
-              "Admin Login",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            content: TextField(
-              controller: passController,
-              obscureText: !showPassword,
-              decoration: InputDecoration(
-                hintText: "Enter admin password",
-                prefixIcon: const Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                      showPassword ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () => setState(() => showPassword = !showPassword),
-                ),
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFD5000),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14)),
-                ),
-                onPressed: () {
-                  if (passController.text == "1234") {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const AdminHomePage()),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Invalid Password"),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                child: const Text("Login"),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
+  
 
   // ─────────────────────────────────────────────
   // PICK AADHAR
@@ -271,7 +204,29 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: submitForm,
+                          onPressed:() {
+                            if (_formKey.currentState!.validate()) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CommonSuccessPage(
+                                    title: "Complaint Submitted!",
+                                    message:
+                                        "Your defective cylinder complaint has been submitted successfully.\nOur team will contact you shortly.",
+                                    onDone: () {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const HomePage(),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFD5000),
                             shape: RoundedRectangleBorder(
@@ -299,31 +254,35 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
       ),
 
       // ---------------- BOTTOM NAV ----------------
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
-          if (index == 1) {
-            showAdminLoginDialog();
-            return;
-          }
-          setState(() => _selectedIndex = index);
-
-          if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const UserProfilePage(),
-              ),
-            );
-          }
-        },
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-          NavigationDestination(
-              icon: Icon(Icons.admin_panel_settings), label: "Admin"),
-          NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
+      bottomNavigationBar: BottomNavigationBar(
+  currentIndex: 0, // Home selected
+  selectedItemColor: const Color(0xFFFD5000),
+  unselectedItemColor: Colors.grey,
+  onTap: (index) {
+    if (index == 0) {
+      // Home
+      Navigator.pop(context);
+    } else if (index == 1) {
+      // Profile
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const UserProfilePage(),
+        ),
+      );
+    }
+  },
+  items: const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: "Home",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: "Profile",
+    ),
+  ],
+),
     );
   }
 
