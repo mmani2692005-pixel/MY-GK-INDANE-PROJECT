@@ -278,7 +278,6 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.home),
             label: "Home",
           ),
-          
           NavigationDestination(
             icon: Icon(Icons.person),
             label: "Profile",
@@ -382,7 +381,7 @@ class _HomePageState extends State<HomePage> {
                 CircleAvatar(
                   radius: 35,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.local_gas_station,
+                  child: Icon(Icons.propane_tank,
                       size: 40, color: Color(0xFFFD5000)),
                 ),
                 SizedBox(height: 10),
