@@ -29,15 +29,13 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) =>
-                      const AdminDefectiveCylinderReportPage(),
+                  builder: (_) => const AdminDefectiveCylinderReportPage(),
                 ),
               );
             },
           ),
         ],
       ),
-
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -69,6 +67,7 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
+              // ignore: deprecated_member_use
               color: Colors.white.withOpacity(0.9),
               borderRadius: BorderRadius.circular(22),
             ),
@@ -101,8 +100,7 @@ class AdminDefectiveCylinderViewPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton.icon(
-                      icon: const Icon(Icons.close,
-                          color: Colors.redAccent),
+                      icon: const Icon(Icons.close, color: Colors.redAccent),
                       label: const Text("Reject"),
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(

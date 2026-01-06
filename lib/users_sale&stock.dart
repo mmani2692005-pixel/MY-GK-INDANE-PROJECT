@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,8 +13,6 @@ class ViewSaleAreaPage extends StatefulWidget {
 }
 
 class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
-  
-
   // DEMO DATA
   final String date = "06 Jan 2026";
   final int stockCount = 150;
@@ -48,8 +47,7 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
                 suffixIcon: IconButton(
                   icon: Icon(
                       showPassword ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () =>
-                      setState(() => showPassword = !showPassword),
+                  onPressed: () => setState(() => showPassword = !showPassword),
                 ),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -71,8 +69,7 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => const AdminHomePage()),
+                      MaterialPageRoute(builder: (_) => const AdminHomePage()),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -98,6 +95,7 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
   Future<void> _callNumber() async {
     final uri = Uri.parse("tel:$inchargePhone");
     if (!await launchUrl(uri)) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Unable to make call")),
       );
@@ -137,6 +135,7 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
+                  // ignore: deprecated_member_use
                   color: Colors.white.withOpacity(0.92),
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -192,8 +191,7 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
                           const SizedBox(height: 12),
                           Row(
                             children: [
-                              const Icon(Icons.phone,
-                                  color: Color(0xFFFD5000)),
+                              const Icon(Icons.phone, color: Color(0xFFFD5000)),
                               const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
@@ -202,8 +200,8 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.call,
-                                    color: Colors.green),
+                                icon:
+                                    const Icon(Icons.call, color: Colors.green),
                                 onPressed: _callNumber,
                               ),
                             ],
@@ -211,8 +209,7 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
                           const SizedBox(height: 8),
                           const Text(
                             "📞 Call in-charge for delivery related issues",
-                            style:
-                                TextStyle(fontSize: 13, color: Colors.grey),
+                            style: TextStyle(fontSize: 13, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -227,36 +224,34 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
 
       // ---------------- BOTTOM NAV ----------------
       bottomNavigationBar: BottomNavigationBar(
-  currentIndex: 0, // Home selected
-  selectedItemColor: const Color(0xFFFD5000),
-  unselectedItemColor: Colors.grey,
-  onTap: (index) {
-    if (index == 0) {
-      // Home
-      Navigator.pop(context);
-    } else if (index == 1) {
-      // Profile
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const UserProfilePage(),
-        ),
-      );
-    }
-  },
-  items: const [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: "Home",
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.person),
-      label: "Profile",
-    ),
-  ],
-),
-
-
+        currentIndex: 0, // Home selected
+        selectedItemColor: const Color(0xFFFD5000),
+        unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          if (index == 0) {
+            // Home
+            Navigator.pop(context);
+          } else if (index == 1) {
+            // Profile
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const UserProfilePage(),
+              ),
+            );
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: "Profile",
+          ),
+        ],
+      ),
     );
   }
 
@@ -287,8 +282,7 @@ class _ViewSaleAreaPageState extends State<ViewSaleAreaPage> {
               children: [
                 Text(
                   title,
-                  style:
-                      const TextStyle(fontSize: 14, color: Colors.grey),
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 const SizedBox(height: 4),
                 Text(

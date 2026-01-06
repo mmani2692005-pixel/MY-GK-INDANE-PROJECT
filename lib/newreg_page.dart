@@ -68,9 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: const Text("Back"),
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
                   const Text(
                     "Create Account",
                     style: TextStyle(
@@ -78,55 +76,41 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 6),
-
                   Text(
                     "Register to get started",
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
-
                   const SizedBox(height: 25),
-
                   TextField(
                     controller: usernameController,
                     decoration: _inputDecoration("Username", Icons.person),
                   ),
-
                   const SizedBox(height: 16),
-
                   TextField(
                     controller: emailController,
                     decoration: _inputDecoration("Email", Icons.email),
                   ),
-
                   const SizedBox(height: 16),
-
                   TextField(
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
                     decoration: _inputDecoration("Phone Number", Icons.phone),
                   ),
-
                   const SizedBox(height: 16),
-
                   TextField(
                     controller: passwordController,
                     obscureText: true,
                     decoration: _inputDecoration("Password", Icons.lock),
                   ),
-
                   const SizedBox(height: 16),
-
                   TextField(
                     controller: confirmController,
                     obscureText: true,
-                    decoration:
-                        _inputDecoration("Confirm Password", Icons.lock_outline),
+                    decoration: _inputDecoration(
+                        "Confirm Password", Icons.lock_outline),
                   ),
-
                   const SizedBox(height: 30),
-
                   SizedBox(
                     width: double.infinity,
                     height: 52,

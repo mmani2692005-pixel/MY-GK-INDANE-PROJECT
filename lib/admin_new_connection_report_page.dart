@@ -50,6 +50,7 @@ class AdminNewConnectionReportPage extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
+              // ignore: deprecated_member_use
               color: Colors.white.withOpacity(0.92),
               borderRadius: BorderRadius.circular(22),
             ),
@@ -57,9 +58,8 @@ class AdminNewConnectionReportPage extends StatelessWidget {
               tilePadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               leading: CircleAvatar(
-                backgroundColor: isApproved
-                    ? Colors.green.shade100
-                    : Colors.red.shade100,
+                backgroundColor:
+                    isApproved ? Colors.green.shade100 : Colors.red.shade100,
                 child: Icon(
                   isApproved ? Icons.check_circle : Icons.cancel,
                   color: isApproved ? Colors.green : Colors.red,
@@ -77,13 +77,11 @@ class AdminNewConnectionReportPage extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               children: [
                 _infoRow(Icons.phone, "Mobile", "98765432$index"),
-                _infoRow(Icons.location_on, "Address",
-                    "Port Blair, Andaman"),
+                _infoRow(Icons.location_on, "Address", "Port Blair, Andaman"),
                 _infoRow(Icons.badge, "KYC ID", "AADHAR-XXXX"),
+                _infoRow(Icons.business, "Connection Type", "Domestic"),
                 _infoRow(
-                    Icons.business, "Connection Type", "Domestic"),
-                _infoRow(Icons.event_available, "Processed Date",
-                    "18-Jan-2025"),
+                    Icons.event_available, "Processed Date", "18-Jan-2025"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -143,8 +141,7 @@ class AdminNewConnectionReportPage extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: "$label: ",
-                    style:
-                        const TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   TextSpan(text: value),
                 ],
