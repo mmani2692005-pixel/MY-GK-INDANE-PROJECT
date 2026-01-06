@@ -2,6 +2,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'adminhome_page.dart';
 import 'user_profile_page.dart';
+import 'home_page.dart';
+import 'common_success_page.dart';
+
 
 class DeliveryComplaintPage extends StatefulWidget {
   const DeliveryComplaintPage({super.key});
@@ -166,13 +169,25 @@ class _DeliveryComplaintPageState extends State<DeliveryComplaintPage> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed:() {
                             if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      "Delivery Complaint Submitted Successfully"),
-                                  backgroundColor: Color(0xFFFD5000),
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CommonSuccessPage(
+                                    title: "Complaint Submitted!",
+                                    message:
+                                        "Your delivery cylinder complaint has been submitted successfully.\nOur team will contact you shortly.",
+                                    onDone: () {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const HomePage(),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    },
+                                  ),
                                 ),
                               );
                             }
@@ -185,11 +200,10 @@ class _DeliveryComplaintPageState extends State<DeliveryComplaintPage> {
                             elevation: 8,
                           ),
                           child: const Text(
-                            "SUBMIT COMPLAINT",
+                            "SUBMIT APPLICATION",
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
                               color: Colors.white,
+                              fontWeight: FontWeight.bold,
                               letterSpacing: 1,
                             ),
                           ),
