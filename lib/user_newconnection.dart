@@ -1,7 +1,11 @@
 import 'dart:io';
 import 'dart:ui';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart'; // 👈 for kIsWeb
+
 import 'user_profile_page.dart';
 import 'common_success_page.dart';
 import 'home_page.dart';
@@ -23,42 +27,101 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
   final phoneController = TextEditingController();
 
   File? aadharFile;
+  Uint8List? webImageBytes;
   final ImagePicker _picker = ImagePicker();
 
-  
-
-  
-
-  // ─────────────────────────────────────────────
-  // PICK AADHAR
-  // ─────────────────────────────────────────────
+  // ================= PICK IMAGE =================
   Future<void> pickAadhar() async {
     final XFile? picked = await _picker.pickImage(source: ImageSource.gallery);
     if (picked != null) {
-      setState(() => aadharFile = File(picked.path));
+      if (kIsWeb) {
+        webImageBytes = await picked.readAsBytes();
+      } else {
+        aadharFile = File(picked.path);
+      }
+      setState(() {});
     }
   }
 
-  // ─────────────────────────────────────────────
-  // SUBMIT
-  // ─────────────────────────────────────────────
-  void submitForm() {
-    if (_formKey.currentState!.validate()) {
-      if (aadharFile == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please upload Aadhaar card")),
-        );
-        return;
+  // ================= SUBMIT FORM =================
+  Future<void> submitForm() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    if (!kIsWeb && aadharFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please upload Aadhaar card")),
+      );
+      return;
+    }
+
+    try {
+      String apiUrl;
+
+      if (kIsWeb) {
+        apiUrl = "http://localhost/flutter_api/new_connection.php";
+      } else {
+        apiUrl = "http://10.0.2.2/flutter_api/new_connection.php";
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("New Connection Application Submitted"),
-          backgroundColor: Colors.green,
-        ),
-      );
+      var uri = Uri.parse(apiUrl);
 
-      Navigator.pop(context);
+      var request = http.MultipartRequest("POST", uri);
+
+      request.fields['full_name'] = nameController.text.trim();
+      request.fields['age'] = ageController.text.trim();
+      request.fields['phone'] = phoneController.text.trim();
+      request.fields['address'] = addressController.text.trim();
+      request.fields['aadhaar_number'] = aadharController.text.trim();
+
+      if (kIsWeb && webImageBytes != null) {
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'aadhaar_image',
+            webImageBytes!,
+            filename: 'aadhaar.png',
+          ),
+        );
+      } else if (aadharFile != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'aadhaar_image',
+            aadharFile!.path,
+          ),
+        );
+      }
+
+      var response = await request.send();
+      var responseData = await response.stream.bytesToString();
+      var data = json.decode(responseData);
+
+      if (data['status'] == true) {
+        Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+            builder: (_) => CommonSuccessPage(
+              title: "Application Submitted!",
+              message:
+                  "Your new gas connection request has been submitted successfully.\nOur team will contact you soon.",
+              onDone: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomePage()),
+                  (route) => false,
+                );
+              },
+            ),
+          ),
+        );
+      } else {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(data['message'])));
+      }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
 
@@ -72,21 +135,19 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
     super.dispose();
   }
 
-  // ─────────────────────────────────────────────
-  // UI
-  // ─────────────────────────────────────────────
+  // ================= UI =================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        elevation: 0,
         backgroundColor: Colors.transparent,
-        centerTitle: true,
+        elevation: 0,
         title: const Text(
           "New Connection Apply",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -124,7 +185,7 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
                         icon: Icons.elderly,
                         keyboard: TextInputType.number,
                         validator: (v) {
-                          final age = int.tryParse(v ?? "");
+                          final age = int.tryParse(v!.trim());
                           if (age == null || age < 18) {
                             return "Age must be 18 or above";
                           }
@@ -137,9 +198,9 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
                         icon: Icons.phone,
                         keyboard: TextInputType.phone,
                         maxLength: 10,
-                        validator: (v) => v != null && v.length == 10
+                        validator: (v) => v != null && v.trim().length == 10
                             ? null
-                            : "Invalid phone",
+                            : "Invalid phone number",
                       ),
                       _field(
                         controller: addressController,
@@ -152,10 +213,14 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
                         label: "Aadhaar Number",
                         icon: Icons.badge,
                         maxLength: 12,
+                        validator: (v) => v != null && v.trim().length == 12
+                            ? null
+                            : "Invalid Aadhaar number",
                       ),
+
                       const SizedBox(height: 20),
 
-                      // ---------------- AADHAR UPLOAD ----------------
+                      // ================= UPLOAD =================
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(14),
@@ -171,16 +236,13 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
                                   fontWeight: FontWeight.w600, fontSize: 16),
                             ),
                             const SizedBox(height: 10),
-                            aadharFile != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.file(
-                                      aadharFile!,
-                                      height: 160,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : const Text("No file selected"),
+                            kIsWeb
+                                ? (webImageBytes != null
+                                    ? Image.memory(webImageBytes!, height: 160)
+                                    : const Text("No file selected"))
+                                : (aadharFile != null
+                                    ? Image.file(aadharFile!, height: 160)
+                                    : const Text("No file selected")),
                             const SizedBox(height: 10),
                             ElevatedButton.icon(
                               onPressed: pickAadhar,
@@ -199,40 +261,17 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
 
                       const SizedBox(height: 30),
 
-                      // ---------------- SUBMIT ----------------
+                      // ================= SUBMIT =================
                       SizedBox(
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed:() {
-                            if (_formKey.currentState!.validate()) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => CommonSuccessPage(
-                                    title: "Complaint Submitted!",
-                                    message:
-                                        "Your defective cylinder complaint has been submitted successfully.\nOur team will contact you shortly.",
-                                    onDone: () {
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const HomePage(),
-                                        ),
-                                        (route) => false,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              );
-                            }
-                          },
+                          onPressed: submitForm,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFD5000),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
-                            elevation: 8,
                           ),
                           child: const Text(
                             "SUBMIT APPLICATION",
@@ -252,41 +291,26 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
           ),
         ),
       ),
-
-      // ---------------- BOTTOM NAV ----------------
       bottomNavigationBar: BottomNavigationBar(
-  currentIndex: 0, // Home selected
-  selectedItemColor: const Color(0xFFFD5000),
-  unselectedItemColor: Colors.grey,
-  onTap: (index) {
-    if (index == 0) {
-      // Home
-      Navigator.pop(context);
-    } else if (index == 1) {
-      // Profile
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const UserProfilePage(),
-        ),
-      );
-    }
-  },
-  items: const [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: "Home",
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.person),
-      label: "Profile",
-    ),
-  ],
-),
+        currentIndex: 0,
+        selectedItemColor: const Color(0xFFFD5000),
+        onTap: (i) {
+          if (i == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const UserProfilePage()),
+            );
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+      ),
     );
   }
 
-  // ---------------- FIELD ----------------
+  // ================= FIELD =================
   Widget _field({
     required TextEditingController controller,
     required String label,
@@ -303,8 +327,8 @@ class _NewConnectionPageState extends State<NewConnectionPage> {
         maxLines: maxLines,
         maxLength: maxLength,
         keyboardType: keyboard,
-        validator:
-            validator ?? (v) => v == null || v.isEmpty ? "Enter $label" : null,
+        validator: validator ??
+            (v) => v == null || v.trim().isEmpty ? "Enter $label" : null,
         decoration: InputDecoration(
           labelText: label,
           prefixIcon: Icon(icon),
